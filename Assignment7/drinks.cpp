@@ -31,11 +31,13 @@ Drink drinks[] = {
 
 // Function prototypes
 int menuSelection();
+float userFunds();
 
 int main() {
 
     // Declare local variables
     int menuChoice;
+    float funds, change, totalRevenue;
     
     do {
         // Display the drinks menu, store and validate user's response
@@ -47,20 +49,97 @@ int main() {
         }
 
         // Prompt the user for how much money they want to put in the machine
-        float funds;
-        cout << "Enter the amount of money you would like to insert: " << endl;
-        cin >> funds;
-        
+        funds = userFunds();
+
+
+        switch(menuChoice) {
+            case 1: // cola
+                if (drinks[0].cost <= funds && drinks[0].qty > 0) {
+                    change = funds - drinks[0].cost; // compute user's change
+                    cout << endl << "Change: " << change << endl; // display user's change
+                    totalRevenue += drinks[0].cost; // add to total revenue
+                    drinks[0].qty--;
+                    break;
+                } else if (drinks[0].cost > funds) {
+                    cout << endl << "Insufficient funds. Please make another selection or enter more money" << endl;
+                } else if (drinks[0].qty == 0) {
+                    cout << endl << "SOLD OUT" << endl;
+                }
+                break;
+            case 2: // rootbeer
+                if (drinks[1].cost <= funds && drinks[1].qty > 0) {
+                    change = funds - drinks[1].cost;
+                    cout << endl << "Change: " << change << endl; 
+                    totalRevenue += drinks[1].cost;                   
+                    drinks[1].qty--;
+
+                    break;
+                } else if (drinks[1].cost > funds) {
+                    cout << endl << "Insufficient funds. Please make another selection or enter more money" << endl;
+                } else if (drinks[1].qty == 0) {
+                    cout << endl << "SOLD OUT" << endl;
+                }
+                break;           
+            case 3: // grape soda
+                if (drinks[2].cost <= funds && drinks[2].qty > 0) {
+                    change = funds - drinks[2].cost;
+                    cout << endl << "Change: " << change << endl;
+                    totalRevenue += drinks[2].cost;
+                    drinks[2].qty--;
+                    break;
+                } else if (drinks[2].cost > funds) {
+                    cout << endl << "Insufficient funds. Please make another selection or enter more money" << endl;
+                } else if (drinks[2].qty == 0) {
+                    cout << endl << "SOLD OUT" << endl;
+                }
+                break; 
+            case 4: // lemon lime
+                if (drinks[3].cost <= funds && drinks[3].qty > 0) {
+                    change = funds - drinks[3].cost;
+                    cout << endl << "Change: " << change << endl;
+                    totalRevenue += drinks[3].cost;
+                    drinks[3].qty--;
+                    break;
+                } else if (drinks[3].cost > funds) {
+                    cout << endl << "Insufficient funds. Please make another selection or enter more money." << endl;
+                } else if (drinks[3].qty == 0) {
+                    cout << endl << "SOLD OUT" << endl;
+                }
+                break; 
+            case 5: // water
+                if (drinks[4].cost <= funds && drinks[4].qty > 0) {
+                    change = funds - drinks[4].cost;
+                    cout << endl << "Change: " << change << endl;
+                    totalRevenue += drinks[4].cost;
+                    drinks[4].qty--;
+                    break;
+                } else if (drinks[4].cost > funds) {
+                    cout << endl << "Insufficient funds. Please make another selection or enter more money" << endl;
+                } else if (drinks[4].qty == 0) {
+                    cout << endl << "SOLD OUT" << endl;
+                }
+                break; 
+        }
 
     } while (menuChoice != 6);
 
     // Display the total revenue and the inventory of each drink item
+    cout << endl << "Total Revenue: " << totalRevenue << endl << endl;
 
+    cout << "Drink " << setw(30) << "Number Remaining " << endl
+         << "-----------------------------------" << endl
+         << drinks[0].name << setw(17) << drinks[0].qty << endl
+         << drinks[1].name << setw(12) << drinks[1].qty << endl
+         << drinks[2].name << setw(11) << drinks[2].qty << endl
+         << drinks[3].name << setw(11) << drinks[3].qty << endl
+         << drinks[4].name << setw(16) << drinks[4].qty << endl;
 
     return 0;
 }
 
 // Function definitions
+
+// -------- MENU DISPLAY -------- //
 int menuSelection()
 {
     int menu;
@@ -90,3 +169,26 @@ int menuSelection()
     }
 }
 
+// -------- USER FUNDS -------- //
+float userFunds()
+{
+    float money;
+    while (true) {
+        cout << "Enter the amount of money you would like to insert: " << endl;
+        cin >> money;
+
+        // To prevent infinite loop, if cin fails, clear input, ignore entire line
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+        // Validate user response
+        if (money > 0 && money <= 1) {
+            return money;
+        } else {
+            cout << endl << "This machine only accepts a value equal to or less than $1." << endl;
+        }
+    
+    }
+}
